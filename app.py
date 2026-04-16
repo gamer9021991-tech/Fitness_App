@@ -44,8 +44,8 @@ if unit_system == "Standard":
     height_m = total_inches * 0.0254
 
 else:
-    weight_kg = st.sidebar.number_input("Weight (kg)", min_value=30.0, max_value=300.0, value=80.0)
-    height_m = st.sidebar.number_input("Height (meters)", min_value=1.0, max_value=2.5, value=1.75)
+    weight_kg = st.sidebar.number_input("Weight (kg)", min_value=29.9, max_value=294.8, value=81.6)
+    height_m = st.sidebar.number_input("Height (meters)", min_value=0.61, max_value=2.72, value=1.75)
 
     # Convert metric to standard for display
     weight_lbs = weight_kg / 0.45359237
