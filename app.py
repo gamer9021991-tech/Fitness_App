@@ -47,95 +47,209 @@ def get_workout_plan(workout_type, experience_level, duration_hours):
 
     if workout_type == "Cardio":
         if duration_minutes <= 20:
-            return [
+            plan = [
                 "5 minutes warm-up walk",
                 "10 minutes brisk walking",
                 "5 minutes cool-down walk"
             ]
+            return plan, 20
+
         elif duration_minutes <= 40:
-            return [
+            plan = [
                 "5 minutes warm-up walk",
                 "20 minutes brisk walking or light cycling",
                 "10 minutes incline walk or steady cycling",
                 "5 minutes cool-down"
             ]
-        else:
-            return [
+            return plan, 40
+
+        elif duration_minutes <= 60:
+            plan = [
                 "5 minutes warm-up walk",
                 "20 minutes brisk walking",
                 "20 minutes cycling or elliptical",
                 "10 minutes incline walk",
                 "5 minutes cool-down"
             ]
+            return plan, 60
+
+        elif duration_minutes <= 90:
+            plan = [
+                "5 minutes warm-up walk",
+                "25 minutes brisk walking",
+                "25 minutes cycling or elliptical",
+                "20 minutes incline walk",
+                "10 minutes rowing or stair climber",
+                "5 minutes cool-down"
+            ]
+            return plan, 90
+
+        else:
+            plan = [
+                "5 minutes warm-up walk",
+                "30 minutes brisk walking",
+                "30 minutes cycling or elliptical",
+                "20 minutes incline walk",
+                "20 minutes rowing or stair climber",
+                "10 minutes moderate steady-state cardio of choice",
+                "5 minutes cool-down"
+            ]
+            return plan, 120
 
     elif workout_type == "Strength":
-        if experience_level == 1:
-            return [
-                "3 x 10 bodyweight squats",
-                "3 x 8 push-ups or incline push-ups",
-                "3 x 10 dumbbell rows",
-                "3 x 20-second plank"
-            ]
-        elif duration_minutes <= 30:
-            return [
-                "3 x 10 goblet squats",
-                "3 x 10 dumbbell bench press",
-                "3 x 10 dumbbell rows",
-                "3 x 30-second plank"
-            ]
-        else:
-            return [
+        if duration_minutes <= 30:
+            if experience_level == 1:
+                plan = [
+                    "3 x 10 bodyweight squats",
+                    "3 x 8 push-ups or incline push-ups",
+                    "3 x 10 dumbbell rows",
+                    "3 x 20-second plank"
+                ]
+            else:
+                plan = [
+                    "3 x 10 goblet squats",
+                    "3 x 10 dumbbell bench press",
+                    "3 x 10 dumbbell rows",
+                    "3 x 30-second plank"
+                ]
+            return plan, 30
+
+        elif duration_minutes <= 60:
+            plan = [
                 "4 x 8 squats",
                 "4 x 8 dumbbell or barbell bench press",
                 "4 x 10 rows",
                 "3 x 10 shoulder press",
-                "3 x 45-second plank"
+                "3 x 45-second plank",
+                "5-10 minutes cool-down stretching"
             ]
+            return plan, 60
+
+        elif duration_minutes <= 90:
+            plan = [
+                "4 x 8 squats",
+                "4 x 8 bench press",
+                "4 x 10 rows",
+                "3 x 10 shoulder press",
+                "3 x 10 Romanian deadlifts",
+                "3 x 12 lunges",
+                "3 x 45-second plank",
+                "10 minutes cool-down stretching"
+            ]
+            return plan, 90
+
+        else:
+            plan = [
+                "5 minutes dynamic warm-up",
+                "4 x 8 squats",
+                "4 x 8 bench press",
+                "4 x 10 rows",
+                "4 x 10 shoulder press",
+                "3 x 10 Romanian deadlifts",
+                "3 x 12 lunges",
+                "3 x 12 bicep curls",
+                "3 x 12 tricep extensions",
+                "3 x 60-second plank",
+                "10-15 minutes cool-down stretching"
+            ]
+            return plan, 120
 
     elif workout_type == "HIIT":
-        if experience_level == 1:
-            return [
+        if duration_minutes <= 20:
+            plan = [
                 "20 seconds jumping jacks / 40 seconds rest x 6 rounds",
                 "20 seconds bodyweight squats / 40 seconds rest x 6 rounds",
                 "5 minutes cool-down"
             ]
+            return plan, 20
+
         elif duration_minutes <= 30:
-            return [
+            plan = [
                 "30 seconds burpees / 30 seconds rest x 8 rounds",
                 "30 seconds mountain climbers / 30 seconds rest x 8 rounds",
                 "5 minutes cool-down"
             ]
-        else:
-            return [
+            return plan, 30
+
+        elif duration_minutes <= 45:
+            plan = [
+                "30 seconds burpees / 30 seconds rest x 10 rounds",
+                "30 seconds jump squats / 30 seconds rest x 10 rounds",
+                "30 seconds mountain climbers / 30 seconds rest x 10 rounds",
+                "5 minutes cool-down"
+            ]
+            return plan, 45
+
+        elif duration_minutes <= 60:
+            plan = [
                 "40 seconds burpees / 20 seconds rest x 10 rounds",
                 "40 seconds jump squats / 20 seconds rest x 10 rounds",
                 "40 seconds mountain climbers / 20 seconds rest x 10 rounds",
+                "30 seconds plank jacks / 30 seconds rest x 8 rounds",
                 "5-10 minutes cool-down"
             ]
+            return plan, 60
+
+        else:
+            plan = [
+                "40 seconds burpees / 20 seconds rest x 12 rounds",
+                "40 seconds jump squats / 20 seconds rest x 12 rounds",
+                "40 seconds mountain climbers / 20 seconds rest x 12 rounds",
+                "40 seconds high knees / 20 seconds rest x 12 rounds",
+                "30 seconds plank jacks / 30 seconds rest x 10 rounds",
+                "10 minutes cool-down"
+            ]
+            return plan, 75
 
     elif workout_type == "Yoga":
         if duration_minutes <= 20:
-            return [
+            plan = [
                 "5 minutes breathing and mobility warm-up",
                 "10 minutes beginner yoga flow",
                 "5 minutes stretching"
             ]
+            return plan, 20
+
         elif duration_minutes <= 40:
-            return [
+            plan = [
                 "5 minutes breathing and mobility warm-up",
                 "15 minutes sun salutation flow",
                 "10 minutes balance and flexibility poses",
                 "5 minutes cool-down stretching"
             ]
-        else:
-            return [
+            return plan, 40
+
+        elif duration_minutes <= 60:
+            plan = [
                 "10 minutes breathing and mobility warm-up",
                 "20 minutes full-body yoga flow",
                 "15 minutes flexibility and balance work",
-                "5 minutes cool-down stretching"
+                "10 minutes cool-down stretching"
             ]
+            return plan, 60
 
-    return ["No workout plan available."]
+        elif duration_minutes <= 90:
+            plan = [
+                "10 minutes breathing and mobility warm-up",
+                "25 minutes full-body yoga flow",
+                "20 minutes flexibility work",
+                "20 minutes balance and stability poses",
+                "10 minutes cool-down stretching"
+            ]
+            return plan, 90
+
+        else:
+            plan = [
+                "10 minutes breathing and mobility warm-up",
+                "30 minutes full-body yoga flow",
+                "25 minutes flexibility work",
+                "25 minutes balance and stability poses",
+                "20 minutes deep stretching and recovery",
+                "10 minutes cool-down breathing"
+            ]
+            return plan, 120
+
+    return ["No workout plan available."], 0
 
 
 # Goal interpretation logic
@@ -256,7 +370,7 @@ predicted_calories = int(round(model.predict(model_input_df)[0], 0))
 
 # Generate actual workout plan
 
-workout_plan = get_workout_plan(recommended_workout, exp, duration)
+workout_plan, planned_minutes = get_workout_plan(recommended_workout, exp, duration)
 
 
 # Output
@@ -280,8 +394,9 @@ st.write(f"**Goal Direction:** {goal_direction}")
 st.write(f"**Calculated BMI:** {bmi:.2f}")
 st.write(f"**Recommended Workout Type:** {recommended_workout}")
 st.write(f"**Estimated Calories Burned:** {predicted_calories}")
-st.write(f"**Session Duration:** {int(duration * 60)} minutes")
+st.write(f"**Requested Workout Length:** {int(duration * 60)} minutes")
+st.write(f"**Planned Workout Length:** {planned_minutes} minutes")
 
-st.subheader("Suggested Workout Plan")
+st.subheader("Suggested Workout Plan for Your Selected Session Length")
 for exercise in workout_plan:
     st.markdown(f"- {exercise}")
