@@ -489,6 +489,9 @@ goal_timeline, estimated_weeks, weekly_calorie_difference = get_goal_timeline(
     predicted_calories,
     freq
 )
+
+weekly_weight_change = weekly_calorie_difference / 3500
+
 # Generate actual workout plan
 
 workout_plan, planned_minutes = get_workout_plan(recommended_workout, exp, duration)
