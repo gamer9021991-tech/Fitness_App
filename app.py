@@ -599,7 +599,7 @@ with col2:
 
 st.markdown("---")
 
-timeline_col = st.columns([1, 2, 1])[1]
+timeline_col = st.columns([1, 3, 1])[1]
 
 with timeline_col:
     st.markdown(
@@ -614,13 +614,31 @@ with timeline_col:
             <h2 style="color: #22C55E; margin-bottom: 10px;">
                 ⏱ Estimated Timeline
             </h2>
+
+            <p style="
+                color: #22C55E;
+                font-family: monospace;
+                font-size: 18px;
+                margin-bottom: 10px;
+            ">
+                Approximately
+            </p>
+
             <h1 style="
                 color: #22C55E;
                 font-family: monospace;
-                letter-spacing: 1px;
+                font-size: 42px;
             ">
-                {goal_timeline}
+                {estimated_weeks:.1f} weeks
             </h1>
+
+            <p style="
+                color: #22C55E;
+                font-family: monospace;
+                font-size: 18px;
+            ">
+                ({estimated_months:.1f} months)
+            </p>
         </div>
         """,
         unsafe_allow_html=True
