@@ -3,8 +3,8 @@ import pandas as pd
 import streamlit as st
 import joblib
 
-st.title("Personalized Workout Type Recommendation App")
-st.write("Enter user information to get a recommended workout type, an estimated calorie burn, and a suggested workout plan.")
+st.title("Personalized Workout Recommendation App")
+st.write("Enter your information to get a recommended workout type, an estimated calorie burn, and a suggested workout plan.")
 
 
 # Load trained model
@@ -602,8 +602,29 @@ st.markdown("---")
 timeline_col = st.columns([1, 2, 1])[1]
 
 with timeline_col:
-    st.markdown("## ⏱ Estimated Timeline")
-    st.markdown(f"### {goal_timeline}")
+    st.markdown(
+        f"""
+        <div style="
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            background-color: #000000;
+            border: 1px solid #22C55E;
+        ">
+            <h2 style="color: #22C55E; margin-bottom: 10px;">
+                ⏱ Estimated Timeline
+            </h2>
+            <h1 style="
+                color: #22C55E;
+                font-family: monospace;
+                letter-spacing: 1px;
+            ">
+                {goal_timeline}
+            </h1>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 st.markdown("---")
 
