@@ -522,7 +522,6 @@ workout_plan, planned_minutes = get_workout_plan(recommended_workout, exp, durat
 
 st.markdown("---")
 st.subheader("Recommendation Results")
-st.markdown("---")
 
 # Top metrics (quick glance info)
 metric1, metric2, metric3 = st.columns(3)
@@ -536,7 +535,6 @@ with metric2:
 with metric3:
     st.metric("Target Heart Rate", f"{target_hr_low}-{target_hr_high} BPM")
 
-st.markdown("---")
 
 # Two-column layout
 
