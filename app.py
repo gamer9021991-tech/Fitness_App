@@ -511,16 +511,19 @@ else:
     st.write(f"**Goal vs Current Weight Gap:** {weight_difference_kg:.1f} kg")
     st.write(f"**Entered Height:** {height_m:.2f} m")
 
+st.write(f"**Goal Type:** {goal_type}")
 st.write(f"**Calculated BMI:** {bmi:.2f} ({bmi_category})")
 st.write(f"**BMI at Goal Weight:** {goal_bmi:.2f} ({goal_bmi_category})")
 st.write(f"**Recommended Workout Type:** {recommended_workout}")
 st.write(f"**Target Heart Rate Range:** {target_hr_low}-{target_hr_high} BPM")
 st.write(f"**Estimated Calories Burned:** {predicted_calories}")
-st.write(f"**Goal Type:** {goal_type}")
 st.write(f"**Estimated Maintenance Calories:** {maintenance_calories} calories/day")
 st.write(f"**Recommended Daily Calorie Intake:** {calorie_target} calories/day")
 st.caption("Calorie intake is an estimate based on user inputs and should not replace medical advice.")
-st.write(f"**Estimated Weekly Calorie Difference:** {int(weekly_calorie_difference)} calories/week")
+if goal_type == "Weight loss":
+    st.write(f"**Estimated Weekly Weight Loss:** {weekly_weight_change:.2f} lbs/week")
+elif goal_type == "Weight gain":
+    st.write(f"**Estimated Weekly Weight Gain:** {weekly_weight_change:.2f} lbs/week")
 st.write(f"**Estimated Timeline to Goal Weight:** {goal_timeline}")
 st.write(f"**Requested Workout Length:** {int(duration * 60)} minutes")
 st.write(f"**Planned Workout Length:** {planned_minutes} minutes")
