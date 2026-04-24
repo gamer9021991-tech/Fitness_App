@@ -571,7 +571,7 @@ with col1:
 
         st.write(f"**Entered Height:** {height_m:.2f} m")
 
-    st.write(f"**Goal:** {goal_direction}")
+    
     st.write(f"**Calculated BMI:** {bmi:.2f} ({bmi_category})")
     st.write(f"**BMI at Goal Weight:** {goal_bmi:.2f} ({goal_bmi_category})")
 
@@ -596,14 +596,14 @@ with col2:
     elif goal_type == "Weight gain":
         st.write(f"**Estimated Weekly Weight Gain:** {weekly_weight_change:.2f} lbs/week")
 
-    st.markdown(f"## ⏱ Estimated Timeline")
-    st.markdown(f"### {goal_timeline}")
-
     st.write(f"**Requested Workout Length:** {int(duration * 60)} minutes")
     st.write(f"**Planned Workout Length:** {planned_minutes} minutes")
 
-
 st.markdown("---")
+
+st.markdown("## ⏱ Estimated Timeline")
+st.markdown(f"### {goal_timeline}")
+
 st.markdown("---")
 
 # Workout Plan Section
