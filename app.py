@@ -511,6 +511,8 @@ goal_timeline, estimated_weeks, weekly_calorie_difference, adjusted_calorie_targ
     freq
 )
 
+estimated_months = estimated_weeks / 4.345
+
 weekly_weight_change = abs(weekly_calorie_difference / 3500)
 
 # Generate actual workout plan
