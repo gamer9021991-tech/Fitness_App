@@ -14,34 +14,121 @@ model = joblib.load(model_path)
 
 
 # Recommendation logic
-
 def recommend_workout(row):
     weight_gap_kg = row["weight_kg"] - row["goal_weight_kg"]
 
-    # If user wants to lose a noticeable amount of weight
-    if weight_gap_kg >= 4.5:  # about 10 lbs
+    # Goal-based logic
+    if weight_gap_kg >= 4.5:
         if row["experience_level"] >= 3:
             return "HIIT"
         return "Cardio"
 
-    # If user wants to gain noticeable weight / muscle
-    elif weight_gap_kg <= -2.3:  # about 5 lbs
+    elif weight_gap_kg <= -2.3:
         return "Strength"
 
-    # If close to goal weight, use BMI and experience
+    # Default logic
+    if row["bmi"] >= 30:
+        return "Cardio"
+    elif row["experience_level"] == 1:
+        return "Strength"
+    elif row["experience_level"] >= 3:
+        return "HIIT"
     else:
-        if row["bmi"] >= 30:
-            return "Cardio"
-        elif row["experience_level"] == 1:
-            return "Strength"
-        elif row["experience_level"] >= 3:
-            return "HIIT"
-        else:
-            return "Yoga"
+        return "Yoga"
 
+
+# Target heart rate logic
+def get_target_heart_rate(age, workout_type):
+    max_heart_rate = 220 - age
+
+    if workout_type == "Yoga":
+        low_percent = 0.50
+        high_percent = 0.60
+    elif workout_type == "Strength":
+        low_percent = 0.60
+        high_percent = 0.70
+    elif workout_type == "Cardio":
+        low_percent = 0.65
+        high_percent = 0.80
+    elif workout_type == "HIIT":
+        low_percent = 0.80
+        high_percent = 0.90
+    else:
+        low_percent = 0.50
+        high_percent = 0.70
+
+    low_target = int(max_heart_rate * low_percent)
+    high_target = int(max_heart_rate * high_percent)
+
+    return low_target, high_target
+
+
+# Calorie target logic
+def get_calorie_target(age, gender, weight_kg, height_m, workout_frequency, weight_difference_lbs):
+    height_cm = height_m * 100
+
+    # Mifflin-St Jeor BMR estimate
+    if gender == "Male":
+        bmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * age) + 5
+    else:
+        bmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * age) - 161
+
+    # Activity multiplier based on workout frequency
+    if workout_frequency <= 1:
+        activity_multiplier = 1.2
+    elif workout_frequency <= 3:
+        activity_multiplier = 1.375
+    elif workout_frequency <= 5:
+        activity_multiplier = 1.55
+    else:
+        activity_multiplier = 1.725
+
+    maintenance_calories = bmr * activity_multiplier
+
+    # Adjust based on goal
+    if weight_difference_lbs > 5:
+        calorie_target = maintenance_calories - 500
+        goal_type = "Weight loss"
+    elif weight_difference_lbs < -5:
+        calorie_target = maintenance_calories + 300
+        goal_type = "Weight gain"
+    else:
+        calorie_target = maintenance_calories
+        goal_type = "Maintenance"
+
+    return int(round(maintenance_calories)), int(round(calorie_target)), goal_type
+
+# estimated timeline to hit goal
+def get_goal_timeline(weight_difference_lbs, goal_type, maintenance_calories, calorie_target, predicted_calories, workout_frequency):
+    pounds_to_change = abs(weight_difference_lbs)
+
+    if pounds_to_change <= 5:
+        return "Already near goal", 0, 0
+
+    daily_food_difference = maintenance_calories - calorie_target
+
+    weekly_food_difference = daily_food_difference * 7
+    weekly_workout_difference = predicted_calories * workout_frequency
+
+    if goal_type == "Weight loss":
+        weekly_calorie_difference = weekly_food_difference + weekly_workout_difference
+    elif goal_type == "Weight gain":
+        weekly_calorie_difference = abs(weekly_food_difference) - weekly_workout_difference
+    else:
+        return "Maintenance goal", 0, 0
+
+    if weekly_calorie_difference <= 0:
+        return "Goal timeline cannot be estimated with the current calorie target and workout plan", 0, weekly_calorie_difference
+
+    total_calories_needed = pounds_to_change * 3500
+    estimated_weeks = total_calories_needed / weekly_calorie_difference
+    estimated_months = estimated_weeks / 4.345
+
+    timeline_text = f"Approximately {estimated_weeks:.1f} weeks ({estimated_months:.1f} months)"
+
+    return timeline_text, estimated_weeks, weekly_calorie_difference
 
 # Workout plan logic
-
 def get_workout_plan(workout_type, experience_level, duration_hours):
     duration_minutes = int(duration_hours * 60)
 
@@ -265,6 +352,19 @@ def get_goal_direction(current_weight_lbs, goal_weight_lbs):
         return "Maintain current weight"
 
 
+# BMI classification logic
+
+def get_bmi_category(bmi):
+    if bmi < 18.5:
+        return "Underweight"
+    elif bmi < 25:
+        return "Normal weight"
+    elif bmi < 30:
+        return "Overweight"
+    else:
+        return "Obese"
+
+
 # Sidebar inputs
 
 unit_system = st.sidebar.radio(
@@ -279,9 +379,9 @@ age = st.sidebar.number_input("Age", min_value=10, max_value=100, value=30)
 gender = st.sidebar.selectbox("Gender", ["Male", "Female"])
 
 if unit_system == "Standard":
-    weight_lbs = st.sidebar.number_input("Current Weight (lbs)", min_value=66.0, max_value=650.0, value=180.0)
-    goal_weight_lbs = st.sidebar.number_input("Goal Weight (lbs)", min_value=66.0, max_value=650.0, value=160.0)
-    height_feet = st.sidebar.number_input("Height - Feet", min_value=2, max_value=8, value=5)
+    weight_lbs = st.sidebar.number_input("Current Weight (lbs)", min_value=66, max_value=650, value=180, step=1)
+    goal_weight_lbs = st.sidebar.number_input("Goal Weight (lbs)", min_value=66, max_value=650, value=160, step=1)
+    height_feet = st.sidebar.number_input("Height - Feet", min_value=2, max_value=8, value=5, step=1)
     height_inches = st.sidebar.number_input("Height - Inches", min_value=0, max_value=11, value=9)
 
     weight_kg = weight_lbs * 0.45359237
@@ -319,9 +419,13 @@ duration = st.sidebar.number_input(
 )
 
 
-# Calculate BMI
+# Calculate BMI and goal information
 
 bmi = weight_kg / (height_m ** 2)
+goal_bmi = goal_weight_kg / (height_m ** 2)
+
+bmi_category = get_bmi_category(bmi)
+goal_bmi_category = get_bmi_category(goal_bmi)
 
 if bmi < 10 or bmi > 60:
     st.warning("Input values may be unrealistic. Please double-check.")
@@ -330,9 +434,17 @@ goal_direction = get_goal_direction(weight_lbs, goal_weight_lbs)
 weight_difference_lbs = weight_lbs - goal_weight_lbs
 weight_difference_kg = weight_kg - goal_weight_kg
 
+maintenance_calories, calorie_target, goal_type = get_calorie_target(
+    age,
+    gender,
+    weight_kg,
+    height_m,
+    freq,
+    weight_difference_lbs
+)
+
 
 # Build prediction input
-
 user_df = pd.DataFrame([{
     "age": age,
     "gender": gender,
@@ -348,6 +460,8 @@ user_df = pd.DataFrame([{
 user_df["recommended_workout"] = user_df.apply(recommend_workout, axis=1)
 
 recommended_workout = user_df["recommended_workout"].iloc[0]
+
+target_hr_low, target_hr_high = get_target_heart_rate(age, recommended_workout)
 
 # Only pass model features the trained model expects
 
@@ -367,7 +481,14 @@ model_input_df = user_df[feature_order]
 
 predicted_calories = int(round(model.predict(model_input_df)[0], 0))
 
-
+goal_timeline, estimated_weeks, weekly_calorie_difference = get_goal_timeline(
+    weight_difference_lbs,
+    goal_type,
+    maintenance_calories,
+    calorie_target,
+    predicted_calories,
+    freq
+)
 # Generate actual workout plan
 
 workout_plan, planned_minutes = get_workout_plan(recommended_workout, exp, duration)
@@ -380,22 +501,30 @@ st.subheader("Recommendation Results")
 st.markdown("---")
 
 if unit_system == "Standard":
-    st.write(f"**Current Weight:** {weight_lbs:.1f} lbs")
-    st.write(f"**Goal Weight:** {goal_weight_lbs:.1f} lbs")
-    st.write(f"**Weight Difference:** {weight_difference_lbs:.1f} lbs")
+    st.write(f"**Current Weight:** {int(weight_lbs)} lbs")
+    st.write(f"**Goal Weight:** {int(goal_weight_lbs)} lbs")
+    st.write(f"**Goal vs Current Weight Gap:** {weight_difference_lbs} lbs")
     st.write(f"**Entered Height:** {height_feet} ft {height_inches} in")
 else:
     st.write(f"**Current Weight:** {weight_kg:.1f} kg")
     st.write(f"**Goal Weight:** {goal_weight_kg:.1f} kg")
-    st.write(f"**Weight Difference:** {weight_difference_kg:.1f} kg")
+    st.write(f"**Goal vs Current Weight Gap:** {weight_difference_kg:.1f} kg")
     st.write(f"**Entered Height:** {height_m:.2f} m")
 
-st.write(f"**Goal Direction:** {goal_direction}")
-st.write(f"**Calculated BMI:** {bmi:.2f}")
+st.write(f"**Calculated BMI:** {bmi:.2f} ({bmi_category})")
+st.write(f"**BMI at Goal Weight:** {goal_bmi:.2f} ({goal_bmi_category})")
 st.write(f"**Recommended Workout Type:** {recommended_workout}")
+st.write(f"**Target Heart Rate Range:** {target_hr_low}-{target_hr_high} BPM")
 st.write(f"**Estimated Calories Burned:** {predicted_calories}")
+st.write(f"**Goal Type:** {goal_type}")
+st.write(f"**Estimated Maintenance Calories:** {maintenance_calories} calories/day")
+st.write(f"**Recommended Daily Calorie Intake:** {calorie_target} calories/day")
+st.caption("Calorie intake is an estimate based on user inputs and should not replace medical advice.")
+st.write(f"**Estimated Weekly Calorie Difference:** {int(weekly_calorie_difference)} calories/week")
+st.write(f"**Estimated Timeline to Goal Weight:** {goal_timeline}")
 st.write(f"**Requested Workout Length:** {int(duration * 60)} minutes")
 st.write(f"**Planned Workout Length:** {planned_minutes} minutes")
+
 
 st.subheader("Suggested Workout Plan for Your Selected Session Length")
 for exercise in workout_plan:
