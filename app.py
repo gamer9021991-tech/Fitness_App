@@ -601,8 +601,11 @@ with col2:
 
 st.markdown("---")
 
-st.markdown("## ⏱ Estimated Timeline")
-st.markdown(f"### {goal_timeline}")
+timeline_col = st.columns([1, 2, 1])[1]
+
+with timeline_col:
+    st.markdown("## ⏱ Estimated Timeline")
+    st.markdown(f"### {goal_timeline}")
 
 st.markdown("---")
 
