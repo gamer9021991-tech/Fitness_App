@@ -102,7 +102,7 @@ def get_goal_timeline(weight_difference_lbs, goal_type, maintenance_calories, ca
     pounds_to_change = abs(weight_difference_lbs)
 
     if pounds_to_change <= 5:
-        return "Already near goal", 0, 0
+        return "Already near goal", 0, 0, None
 
     daily_food_difference = maintenance_calories - calorie_target
 
@@ -114,7 +114,7 @@ def get_goal_timeline(weight_difference_lbs, goal_type, maintenance_calories, ca
     elif goal_type == "Weight gain":
         weekly_calorie_difference = abs(weekly_food_difference)
     else:
-        return "Maintenance goal", 0, 0
+        return "Maintenance goal", 0, 0, None
 
     if weekly_calorie_difference <= 0:
         if goal_type == "Weight gain":
@@ -627,7 +627,7 @@ with timeline_col:
             <h1 style="
                 color: #22C55E;
                 font-family: monospace;
-                font-size: 42px;
+                font-size: 48px;
             ">
                 {estimated_weeks:.1f} weeks
             </h1>
