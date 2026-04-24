@@ -601,7 +601,7 @@ with col2:
 
 st.markdown("---")
 
-timeline_col = st.columns([1, 3, 1])[1]
+timeline_col = st.columns([1, 4, 1])[1]
 
 with timeline_col:
     timeline_html = f"""
