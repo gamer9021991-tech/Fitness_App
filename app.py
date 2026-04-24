@@ -604,48 +604,15 @@ st.markdown("---")
 timeline_col = st.columns([1, 3, 1])[1]
 
 with timeline_col:
-    st.markdown(
-        f"""
-        <div style='
-            text-align: center;
-            padding: 20px;
-            border-radius: 12px;
-            background-color: #000000;
-            border: 1px solid #22C55E;
-        '>
-            <h2 style='color: #22C55E; margin-bottom: 10px;'>
-                ⏱ Estimated Timeline
-            </h2>
-
-            <p style='
-                color: #22C55E;
-                font-family: monospace;
-                font-size: 18px;
-                margin-bottom: 10px;
-            '>
-                Approximately
-            </p>
-
-            <h1 style='
-                color: #22C55E;
-                font-family: monospace;
-                font-size: 48px;
-            '>
-                {estimated_weeks:.1f} weeks
-            </h1>
-
-            <p style='
-                color: #22C55E;
-                font-family: monospace;
-                font-size: 18px;
-            '>
-                ({estimated_months:.1f} months)
-            </p>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
+    timeline_html = f"""
+<div style='text-align: center; padding: 24px; border-radius: 12px; background-color: #000000; border: 1px solid #22C55E;'>
+<h2 style='color: #22C55E; margin-bottom: 10px;'>⏱ Estimated Timeline</h2>
+<p style='color: #22C55E; font-family: monospace; font-size: 18px; margin-bottom: 10px;'>Approximately</p>
+<h1 style='color: #22C55E; font-family: monospace; font-size: 48px; margin: 10px 0;'>{estimated_weeks:.1f} weeks</h1>
+<p style='color: #22C55E; font-family: monospace; font-size: 18px;'>({estimated_months:.1f} months)</p>
+</div>
+"""
+    st.markdown(timeline_html, unsafe_allow_html=True)
 st.markdown("---")
 
 # Workout Plan Section
