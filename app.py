@@ -490,7 +490,7 @@ goal_timeline, estimated_weeks, weekly_calorie_difference = get_goal_timeline(
     freq
 )
 
-weekly_weight_change = weekly_calorie_difference / 3500
+weekly_weight_change = abs(weekly_calorie_difference / 3500)
 
 # Generate actual workout plan
 
@@ -505,16 +505,29 @@ st.markdown("---")
 
 if unit_system == "Standard":
     st.write(f"**Current Weight:** {int(weight_lbs)} lbs")
-    st.write(f"**Goal Weight:** {int(goal_weight_lbs)} lbs")
-    st.write(f"**Goal vs Current Weight Gap:** {weight_difference_lbs} lbs")
+
+    if weight_difference_lbs > 0:
+        st.write(f"**Weight to Lose:** {abs(int(weight_difference_lbs))} lbs")
+    elif weight_difference_lbs < 0:
+        st.write(f"**Weight to Gain:** {abs(int(weight_difference_lbs))} lbs")
+    else:
+        st.write("**Weight Goal:** Maintain current weight")
+
     st.write(f"**Entered Height:** {height_feet} ft {height_inches} in")
+
 else:
     st.write(f"**Current Weight:** {weight_kg:.1f} kg")
-    st.write(f"**Goal Weight:** {goal_weight_kg:.1f} kg")
-    st.write(f"**Goal vs Current Weight Gap:** {weight_difference_kg:.1f} kg")
+
+    if weight_difference_kg > 0:
+        st.write(f"**Weight to Lose:** {abs(weight_difference_kg):.1f} kg")
+    elif weight_difference_kg < 0:
+        st.write(f"**Weight to Gain:** {abs(weight_difference_kg):.1f} kg")
+    else:
+        st.write("**Weight Goal:** Maintain current weight")
+
     st.write(f"**Entered Height:** {height_m:.2f} m")
 
-st.write(f"**Goal Type:** {goal_type}")
+st.write(f"**Goal:** {goal_direction}")
 st.write(f"**Calculated BMI:** {bmi:.2f} ({bmi_category})")
 st.write(f"**BMI at Goal Weight:** {goal_bmi:.2f} ({goal_bmi_category})")
 st.write(f"**Recommended Workout Type:** {recommended_workout}")
