@@ -599,7 +599,7 @@ with col2:
     st.write(f"**Requested Workout Length:** {int(duration * 60)} minutes")
     st.write(f"**Planned Workout Length:** {planned_minutes} minutes")
 
-st.markdown("---")
+st.markdown("<hr style='border: 1px solid #374151;'>", unsafe_allow_html=True)
 
 timeline_col = st.columns([1, 4, 1])[1]
 
