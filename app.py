@@ -431,10 +431,10 @@ exp = st.sidebar.selectbox(
 )
 duration = st.sidebar.number_input(
     "Session Duration (hours)",
-    min_value=0.25,
-    max_value=4.0,
+    min_value=0.50,
+    max_value=2.0,
     value=1.0,
-    step=0.25
+    step=0.5
 )
 
 
